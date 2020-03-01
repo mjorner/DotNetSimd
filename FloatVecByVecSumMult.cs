@@ -13,8 +13,8 @@ namespace TestSIMD {
             if (len >= lanes) {
                 int i = 0;
                 while (i < len - remain) {
-                    Vector<float> va = new Vector<float>(new ReadOnlySpan<float>(arr, i, lanes));
-                    Vector<float> va2 = new Vector<float>(new ReadOnlySpan<float>(arr2, i, lanes));
+                    Vector<float> va = new Vector<float>(arr, i);
+                    Vector<float> va2 = new Vector<float>(arr2, i);
                     vsum += va * va2;
                     i += lanes;
                 }
@@ -63,7 +63,7 @@ namespace TestSIMD {
             return result;
         }
 
-        public static float BareMetalSumVecMult(float[] arr, float[] arr2) {
+        public static float NaiveVecByVecFloatMult(float[] arr, float[] arr2) {
             float sum = 0.0F;
             for (int i = 0; i < arr.Length; i++) {
                 sum += arr[i] * arr2[i];

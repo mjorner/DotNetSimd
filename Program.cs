@@ -61,7 +61,7 @@ namespace TestSIMD {
 
             PrintDescription("RES=SUM(ARR*ARR) (FLOAT)", baseColor);
             TestArraySumMultSpeed(FloatVecByVecSumMult.SimdExplicitSumVecMult, GetFloatArray(VecSize), GetConstantFloatArray(VecSize));
-            TestArraySumMultSpeed(FloatVecByVecSumMult.BareMetalSumVecMult, GetFloatArray(VecSize), GetConstantFloatArray(VecSize));
+            TestArraySumMultSpeed(FloatVecByVecSumMult.NaiveVecByVecFloatMult, GetFloatArray(VecSize), GetConstantFloatArray(VecSize));
             if (avx2Available) { TestArraySumMultSpeed(FloatVecByVecSumMult.SimdExplicitSumVecMultAvx2, GetFloatArray(VecSize), GetConstantFloatArray(VecSize)); }
         }
 

@@ -48,10 +48,10 @@ namespace TestSIMD {
             if (len >= lanes) {
                 int i = 0;
                 while (i < len - remain) {
-                    Vector<double> vsum = new Vector<double>(new ReadOnlySpan<double>(arr, i, lanes));
-                    Vector<double> vsum2 = new Vector<double>(new ReadOnlySpan<double>(arr2, i, lanes));
-                    vsum = vsum * vsum2;
-                    vsum.CopyTo(new Span<double>(res, i, lanes));
+                    Vector<double> va = new Vector<double>(arr, i);
+                    Vector<double> va2 = new Vector<double>(arr2, i);
+                    va = va * va2;
+                    va.CopyTo(res, i);
                     i += lanes;
                 }
             }

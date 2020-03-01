@@ -11,8 +11,8 @@ namespace TestSIMD {
             if (len >= lanes) {
                 int i = 0;
                 while (i < len - remain) {
-                    Vector<double> va = new Vector<double>(new ReadOnlySpan<double>(arr, i, lanes));
-                    Vector<double> va2 = new Vector<double>(new ReadOnlySpan<double>(arr2, i, lanes));
+                    Vector<double> va = new Vector<double>(arr, i);
+                    Vector<double> va2 = new Vector<double>(arr2, i);
                     vsum += va * va2;
                     i += lanes;
                 }
