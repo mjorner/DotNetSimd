@@ -21,7 +21,7 @@ namespace TestSIMD {
             bool avx2Available = Avx2.IsSupported;
 
             ConsoleColor baseColor = Console.ForegroundColor;
-            Console.ForegroundColor = ConsoleColor.Red;
+            Console.ForegroundColor = ConsoleColor.DarkCyan;
             Console.WriteLine("CPU " + (enabled? "supports": "does not support") + " vectorization");
             if (enabled) {
                 int lanes = Vector<double>.Count;
