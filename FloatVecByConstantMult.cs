@@ -71,18 +71,18 @@ namespace TestSIMD {
             return sum + remainder;
         }
 
-        public static unsafe float SimdExplicitFloatSumAvx2(float[] source) {
+        public static unsafe float SimdExplicitFloatSumAvx2(float[] arr) {
             float result;
             int lanes = Vector256<float>.Count;
 
-            fixed(float * pSource = source) {
+            fixed(float * pArr = arr) {
                 Vector256<float> vresult = Vector256<float>.Zero;
 
                 int i = 0;
-                int lastBlockIndex = source.Length - (source.Length % lanes);
+                int lastBlockIndex = arr.Length - (arr.Length % lanes);
 
                 while (i < lastBlockIndex) {
-                    Vector256<float> vv = Avx2.LoadVector256(pSource + i);
+                    Vector256<float> vv = Avx2.LoadVector256(pArr + i);
                     vv = Avx2.Multiply(vv, Vector256.Create(FloatVecByConstantMult.Constant));
                     vresult = Avx2.Add(vresult, vv);
                     i += lanes;
@@ -95,8 +95,8 @@ namespace TestSIMD {
                     result += temp[j];
                 }
 
-                while (i < source.Length) {
-                    result += pSource[i] * FloatVecByConstantMult.Constant;
+                while (i < arr.Length) {
+                    result += pArr[i] * FloatVecByConstantMult.Constant;
                     i += 1;
                 }
             }

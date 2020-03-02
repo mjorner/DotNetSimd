@@ -14,8 +14,8 @@ namespace TestSIMD {
                 int i = 0;
                 while (i < len - remain) {
                     Vector<float> va = new Vector<float>(arr, i);
-                    Vector<float> va2 = new Vector<float>(arr2, i);
-                    vsum += va * va2;
+                    Vector<float> vb = new Vector<float>(arr2, i);
+                    vsum += va * vb;
                     i += lanes;
                 }
             }
@@ -30,33 +30,33 @@ namespace TestSIMD {
             return sum;
         }
 
-        public static unsafe float SimdExplicitSumVecMultAvx2(float[] source, float[] constants) {
+        public static unsafe float SimdExplicitSumVecMultAvx2(float[] arr, float[] arr2) {
             float result;
             int lanes = Vector256<float>.Count;
 
-            fixed(float * pSource = source, pConstant = constants) {
+            fixed(float * pArr = arr, pArr2 = arr2) {
                 Vector256<float> vresult = Vector256<float>.Zero;
 
                 int i = 0;
-                int lastBlockIndex = source.Length - (source.Length % lanes);
+                int lastBlockIndex = arr.Length - (arr.Length % lanes);
 
                 while (i < lastBlockIndex) {
-                    Vector256<float> vv = Avx2.LoadVector256(pSource + i);
-                    Vector256<float> vv2 = Avx2.LoadVector256(pConstant + i);
+                    Vector256<float> vv = Avx2.LoadVector256(pArr + i);
+                    Vector256<float> vv2 = Avx2.LoadVector256(pArr2 + i);
                     vv = Avx2.Multiply(vv, vv2);
                     vresult = Avx2.Add(vresult, vv);
                     i += lanes;
                 }
 
                 result = 0.0F;
-                float* temp = stackalloc float[lanes];
+                float * temp = stackalloc float[lanes];
                 Avx2.Store(temp, vresult);
                 for (int j = 0; j < lanes; j++) {
                     result += temp[j];
                 }
 
-                while (i < source.Length) {
-                    result += pSource[i] * FloatVecByConstantMult.Constant;
+                while (i < arr.Length) {
+                    result += pArr[i] * FloatVecByConstantMult.Constant;
                     i += 1;
                 }
             }

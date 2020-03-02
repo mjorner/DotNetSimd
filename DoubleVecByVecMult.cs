@@ -49,8 +49,8 @@ namespace TestSIMD {
                 int i = 0;
                 while (i < len - remain) {
                     Vector<double> va = new Vector<double>(arr, i);
-                    Vector<double> va2 = new Vector<double>(arr2, i);
-                    va = va * va2;
+                    Vector<double> vb = new Vector<double>(arr2, i);
+                    va = va * vb;
                     va.CopyTo(res, i);
                     i += lanes;
                 }
