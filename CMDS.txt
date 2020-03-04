@@ -1,2 +1,2 @@
 dotnet publish -c Release  -r win10-x64
-dotnet ildasm .\bin\Release\netcoreapp3.0\win10-x64\publish\TestSIMD.dll -o ildasm.txt
+dotnet ildasm .\bin\Release\netcoreapp3.1\win10-x64\publish\TestSIMD.dll -o ildasm.txt

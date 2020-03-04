@@ -1,8 +1,13 @@
 using System;
 using System.Numerics;
+using System.Runtime.CompilerServices;
 
 namespace TestSIMD {
     public class DoubleVecByVecSumMult {
+        private const MethodImplOptions MaxOpt =
+            MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization;
+
+        [MethodImpl(MaxOpt)]
         public static double SimdExplicitSumVecByVecMult(double[] arr, double[] arr2) {
             int len = arr.Length;
             int lanes = Vector<double>.Count;
@@ -27,7 +32,8 @@ namespace TestSIMD {
             }
             return sum;
         }
-
+        
+        [MethodImpl(MaxOpt)]
         public static double NaiveSumVecByVecMult(double[] arr, double[] arr2) {
             double sum = 0.0;
             for (int i = 0; i < arr.Length; i++) {

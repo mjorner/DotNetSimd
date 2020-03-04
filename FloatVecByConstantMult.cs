@@ -3,19 +3,25 @@ using System.Linq;
 using System.Numerics;
 using System.Runtime.Intrinsics;
 using System.Runtime.Intrinsics.X86;
+using System.Runtime.CompilerServices;
 
 namespace TestSIMD {
     public static class FloatVecByConstantMult {
-        public static readonly float Constant = (float)Math.PI;
+        private const MethodImplOptions MaxOpt =
+            MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization;
+        public static readonly float Constant = (float) Math.PI;
 
+        [MethodImpl(MaxOpt)]
         public static float LinqFloatSum(float[] arr) {
             return arr.Sum(x => x * Constant);
         }
 
+        [MethodImpl(MaxOpt)]
         public static float LinqFloatAggr(float[] arr) {
             return arr.Aggregate(0.0F, (acc, x) => acc + x * Constant);
         }
 
+        [MethodImpl(MaxOpt)]
         public static float NaiveForEachFloatSum(float[] arr) {
             float sum = 0.0F;
             foreach (float d in arr) {
@@ -24,6 +30,7 @@ namespace TestSIMD {
             return sum;
         }
 
+        [MethodImpl(MaxOpt)]
         public static float NaiveForFloatSum(float[] arr) {
             float sum = 0.0F;
             for (int i = 0; i < arr.Length; i++) {
@@ -32,6 +39,7 @@ namespace TestSIMD {
             return sum;
         }
 
+        [MethodImpl(MaxOpt)]
         public unsafe static float UnsafeNaiveForFloatSum(float[] arr) {
             float sum = 0.0F;
             int len = arr.Length;
@@ -43,14 +51,7 @@ namespace TestSIMD {
             return sum;
         }
 
-        private static float SumSpan(ReadOnlySpan<float> span) {
-            float sum = 0.0F;
-            foreach (float value in span) {
-                sum += value * Constant;
-            }
-            return sum;
-        }
-
+        [MethodImpl(MaxOpt)]
         public static float SimdExplicitFloatSum(float[] arr) {
             int len = arr.Length;
             int lanes = Vector<float>.Count;
@@ -67,12 +68,16 @@ namespace TestSIMD {
             for (int i = 0; i < lanes; i++) {
                 sum += vsum[i];
             }
-            float remainder = SumSpan(new ReadOnlySpan<float>(arr, (len - remain), remain));
-            return sum + remainder;
+            for (int i = (len - remain); i < len; i++) {
+                sum += arr[i] * Constant;
+            }
+
+            return sum;
         }
 
+        [MethodImpl(MaxOpt)]
         public static unsafe float SimdExplicitFloatSumAvx2(float[] arr) {
-            float result;
+            float sum;
             int lanes = Vector256<float>.Count;
 
             fixed(float * pArr = arr) {
@@ -88,19 +93,19 @@ namespace TestSIMD {
                     i += lanes;
                 }
 
-                result = 0.0F;
-                float* temp = stackalloc float[lanes];
+                sum = 0.0F;
+                float * temp = stackalloc float[lanes];
                 Avx2.Store(temp, vresult);
                 for (int j = 0; j < lanes; j++) {
-                    result += temp[j];
+                    sum += temp[j];
                 }
 
                 while (i < arr.Length) {
-                    result += pArr[i] * FloatVecByConstantMult.Constant;
+                    sum += pArr[i] * Constant;
                     i += 1;
                 }
             }
-            return result;
+            return sum;
         }
     }
 }

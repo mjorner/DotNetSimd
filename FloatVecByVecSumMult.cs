@@ -2,9 +2,15 @@ using System;
 using System.Numerics;
 using System.Runtime.Intrinsics;
 using System.Runtime.Intrinsics.X86;
+using System.Runtime.CompilerServices;
 
 namespace TestSIMD {
     public static class FloatVecByVecSumMult {
+        
+        private const MethodImplOptions MaxOpt =
+            MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization;
+
+        [MethodImpl(MaxOpt)]
         public static float SimdExplicitSumVecMult(float[] arr, float[] arr2) {
             int len = arr.Length;
             int lanes = Vector<float>.Count;
@@ -30,6 +36,7 @@ namespace TestSIMD {
             return sum;
         }
 
+        [MethodImpl(MaxOpt)]
         public static unsafe float SimdExplicitSumVecMultAvx2(float[] arr, float[] arr2) {
             float result;
             int lanes = Vector256<float>.Count;
@@ -63,6 +70,7 @@ namespace TestSIMD {
             return result;
         }
 
+        [MethodImpl(MaxOpt)]
         public static float NaiveVecByVecFloatMult(float[] arr, float[] arr2) {
             float sum = 0.0F;
             for (int i = 0; i < arr.Length; i++) {

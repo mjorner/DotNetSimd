@@ -82,7 +82,6 @@ namespace TestSIMD {
                 res = func(arr);
             }
             sw.Stop();
-            //res = Math.Ceiling(res);
             Console.WriteLine($"{funcMethodName.PadRight(30)} {(sw.ElapsedMilliseconds+"ms").PadRight(10)} {res}");
         }
 
@@ -96,7 +95,6 @@ namespace TestSIMD {
                 res = func(arr);
             }
             sw.Stop();
-            //res = Math.Ceiling(res);
             Console.WriteLine($"{funcMethodName.PadRight(30)} {(sw.ElapsedMilliseconds+"ms").PadRight(10)} {res}");
         }
 
@@ -111,7 +109,6 @@ namespace TestSIMD {
             }
             sw.Stop();
             double res = vec.Sum();
-            //res = Math.Ceiling(res);
             Console.WriteLine($"{funcMethodName.PadRight(30)} {(sw.ElapsedMilliseconds+"ms").PadRight(10)} {res}");
         }
 
@@ -125,7 +122,6 @@ namespace TestSIMD {
                 res = func(arr, arr2);
             }
             sw.Stop();
-            //res = Math.Ceiling(res);
             Console.WriteLine($"{funcMethodName.PadRight(30)} {(sw.ElapsedMilliseconds+"ms").PadRight(10)} {res}");
         }
 
@@ -139,7 +135,6 @@ namespace TestSIMD {
                 res = func(arr, arr2);
             }
             sw.Stop();
-            //res = Math.Ceiling(res);
             Console.WriteLine($"{funcMethodName.PadRight(30)} {(sw.ElapsedMilliseconds+"ms").PadRight(10)} {res}");
         }
 
